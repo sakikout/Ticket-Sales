@@ -1,0 +1,66 @@
+# docker-compose-dev.yml
+services:
+
+  pgsql-ticket:
+    image: postgres:17.6
+    ports:
+      # HOST:CONTAINER
+      - "9876:5432"
+    environment:
+      - POSTGRES_PASSWORD=pgsql-ticket-password # Senha do superusuário
+      - POSTGRES_USER=pgsql-ticket-master     # Nome do superusuário
+    networks:
+      - backend
+    volumes:
+      # Scripts de criação dos bancos de dados
+      # Certifique-se que todos esses arquivos .sql existem na pasta!
+      - ./01-create-database-users.sql:/docker-entrypoint-initdb.d/01-create-database-users.sql
+      - ./02-create-database-sales.sql:/docker-entrypoint-initdb.d/02-create-database-sales.sql
+      - ./03-create-database-notifications.sql:/docker-entrypoint-initdb.d/03-create-database-notifications.sql
+      
+      # Mapear a pasta de dados para o host - preservar os dados
+      - ./pg_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:9.8.0
+    ports:
+      - "8123:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=web@ufop.edu.br
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    networks:
+      - backend
+    depends_on: # Garante que o pgadmin só suba depois do banco
+      - pgsql-ticket
+
+  # --- NOSSO NOVO SERVIÇO DA APLICAÇÃO ---
+  sales-app:
+    build: . # Constrói a imagem usando o Dockerfile na pasta atual
+    image: sales-microservice # Nomeia a imagem construída
+    ports:
+      - "4000:4000" # Mapeia a porta da aplicação (Host:Container)
+    networks:
+      - backend
+    depends_on: # Garante que a app só suba depois do banco
+      - pgsql-ticket
+    environment:
+      # Variáveis de ambiente que sobrescrevem o application.properties
+      - SERVER_PORT=4000
+      
+      # --- Configuração do Banco de Dados ---
+      # IMPORTANTE:
+      # O host é 'pgsql-ticket' (nome do serviço do banco no Docker Compose)
+      # A porta é '5432' (a porta INTERNA do container do banco)
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://pgsql-ticket:5432/tickets-sales
+      
+      # Usamos o usuário e senha que criamos no script SQL
+      - SPRING_DATASOURCE_USERNAME=pg-tickets-sales
+      - SPRING_DATASOURCE_PASSWORD=tickets-sales-password
+      
+      # Configurações do Hibernate
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+
+networks:
+  frontend:
+  backend:

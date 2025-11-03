@@ -11,7 +11,7 @@
     <groupId>br.edu.ufop.web</groupId>
     <artifactId>sales</artifactId> <version>0.0.1-SNAPSHOT</version>
     <name>sales</name> <description>Microsserviço de Vendas de Ingressos</description>
-    <description>users</description>
+    <!-- <description>sales</description> -->
     <url/>
     <licenses>
         <license/>

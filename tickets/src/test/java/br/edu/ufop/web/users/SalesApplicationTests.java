@@ -1,10 +1,10 @@
-package br.edu.ufop.web.users;
+package br.edu.ufop.web.tickets;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UsersApplicationTests {
+class SalesApplicationTests {
 
     @Test
     void contextLoads() {

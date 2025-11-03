@@ -1,6 +1,6 @@
 # Estágio 1: Build (Construção)
 # Usamos a imagem do Maven com JDK 17 (mesma versão do seu pom.xml)
-FROM eclipse-temurin:17-jdk-jammy AS builder
+FROM maven:3-eclipse-temurin-17 AS builder
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app

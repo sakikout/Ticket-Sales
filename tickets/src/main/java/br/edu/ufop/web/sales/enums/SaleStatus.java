@@ -1,4 +1,4 @@
-package br.edu.ufop.web.sales.model;
+package br.edu.ufop.web.sales.enums;
 
 public enum SaleStatus {
     EM_ABERTO,

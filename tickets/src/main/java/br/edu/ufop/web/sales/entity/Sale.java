@@ -1,4 +1,7 @@
-package br.edu.ufop.web.sales.model;
+package br.edu.ufop.web.sales.entity;
+
+import br.edu.ufop.web.sales.entity.base.AuditableEntity;
+import br.edu.ufop.web.sales.enums.SaleStatus;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,5 +36,5 @@ public class Sale extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
+    private EventEntity event;
 }

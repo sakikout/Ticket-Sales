@@ -1,7 +1,7 @@
 package br.edu.ufop.web.sales.controller;
 
 import br.edu.ufop.web.sales.dto.SaleDTO;
-import br.edu.ufop.web.sales.model.Sale;
+import br.edu.ufop.web.sales.domain.Sale;
 import br.edu.ufop.web.sales.service.SaleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/sales") // Prefixo para todos os endpoints de venda
+@RequestMapping("/sales")
 @RequiredArgsConstructor
 public class SaleController {
 

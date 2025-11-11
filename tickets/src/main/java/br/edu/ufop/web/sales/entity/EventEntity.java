@@ -1,4 +1,8 @@
-package br.edu.ufop.web.sales.model;
+package br.edu.ufop.web.sales.entity;
+
+import br.edu.ufop.web.sales.entity.base.AuditableEntity;
+import br.edu.ufop.web.sales.enums.EventType;
+import br.edu.ufop.web.sales.entity.SaleEntity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +21,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event extends Auditable {
+public class EventEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,5 +47,5 @@ public class Event extends Auditable {
     private Float price;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Sale> sales = new ArrayList<>();
+    private List<SaleEntity> sales = new ArrayList<>();
 }

@@ -1,7 +1,7 @@
 package br.edu.ufop.web.sales.controller;
 
 import br.edu.ufop.web.sales.dto.EventDTO;
-import br.edu.ufop.web.sales.model.Event;
+import br.edu.ufop.web.sales.domain.Event;
 import br.edu.ufop.web.sales.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

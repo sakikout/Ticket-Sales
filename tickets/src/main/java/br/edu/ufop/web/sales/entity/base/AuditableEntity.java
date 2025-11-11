@@ -1,4 +1,4 @@
-package br.edu.ufop.web.sales.model;
+package br.edu.ufop.web.sales.entity.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable {
+public abstract class AuditableEntity {
 
     @CreatedDate
     @Column(name = "createdAt", nullable = false, updatable = false)

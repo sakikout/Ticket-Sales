@@ -19,9 +19,9 @@ public abstract class AuditableEntity {
 
     @CreatedDate
     @Column(name = "createdAt", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "updatedAt")
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 }

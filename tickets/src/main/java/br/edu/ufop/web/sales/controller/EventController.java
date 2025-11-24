@@ -19,6 +19,11 @@ public class EventController {
 
     private final EventService eventService;
 
+    @GetMapping("/status")
+    public ResponseEntity<String> getStatus() {
+        return ResponseEntity.ok("Events service is running");
+    }
+
     // CREATE
     @PostMapping
     public ResponseEntity<Event> createEvent(@Valid @RequestBody EventDTO eventDTO) {

@@ -19,6 +19,11 @@ public class SaleController {
 
     private final SaleService saleService;
 
+    @GetMapping("/status")
+    public ResponseEntity<String> getStatus() {
+        return ResponseEntity.ok("Sales service is running.");
+    }
+
     // CREATE
     @PostMapping
     public ResponseEntity<Sale> createSale(@Valid @RequestBody SaleDTO saleDTO) {

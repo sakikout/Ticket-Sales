@@ -4,5 +4,5 @@ public enum SaleStatus {
     EM_ABERTO,
     PAGO,
     CANCELADO,
-    ESTORNADO 
+    ESTORNADO
 }

@@ -6,6 +6,66 @@ Este documento descreve os endpoints JSON disponíveis no microsserviço de vend
 
 ---
 
+## Usuários (`/users`)
+
+Entidade que representa os usuários do sistema (Clientes, Admin, etc).
+
+### 1. Criar Usuário
+
+* **Método:** `POST`
+* **Endpoint:** `/users`
+* **Body (JSON):**
+  ```json
+  {
+    "name": "Fulana da Silva",
+    "email": "fulana@example.com",
+    "password": "senha_segura_123",
+    "city": "São Paulo",
+    "type": "CLIENTE" 
+  }
+  ```
+
+
+### 2. Listar todos os Usuários
+
+* **Método:** `GET`
+* **Endpoint:** `/users`
+* **Resposta (Sucesso):** `200 OK` com um array de objetos de usuário.
+
+### 3. Buscar Usuário por ID
+
+* **Método:** `GET`
+* **Endpoint:** `/users/{id}`
+* **Exemplo:** `/users/a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890`
+* **Resposta (Sucesso):** `200 OK` com o objeto do usuário.
+* **Resposta (Erro):** `404 NOT FOUND` se o ID não existir.
+
+### 4. Atualizar Usuário
+
+* **Método:** `PUT`
+* **Endpoint:** `/users/{id}`
+* **Body (JSON):**
+  **JSON**
+
+  ```
+  {
+    "name": "Sachi Nanjou",
+    "email": "fulana.nova@example.com",
+    "password": "nova_senha_se_for_trocar",
+    "city": "Rio de Janeiro",
+    "type": "ADMIN"
+  }
+  ```
+* **Resposta (Sucesso):** `200 OK` com o objeto do usuário atualizado.
+* **Resposta (Erro):** `404 NOT FOUND` se o ID não existir.
+
+### 5. Deletar Usuário
+
+* **Método:** `DELETE`
+* **Endpoint:** `/users/{id}`
+* **Resposta (Sucesso):** `204 NO CONTENT`.
+* **Resposta (Erro):** `404 NOT FOUND` se o ID não existir.
+
 ## Eventos (`/events`)
 
 Entidade principal para gerenciar os eventos disponíveis para venda.

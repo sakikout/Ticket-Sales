@@ -1,17 +1,16 @@
 package br.edu.ufop.web.sales.service;
 
 import br.edu.ufop.web.sales.converter.SaleConverter;
-import br.edu.ufop.web.sales.converter.EventConverter;
 import br.edu.ufop.web.sales.domain.Sale;
 import br.edu.ufop.web.sales.dto.SaleDTO;
-import br.edu.ufop.web.sales.exception.ResourceNotFoundException;
 import br.edu.ufop.web.sales.entity.EventEntity;
 import br.edu.ufop.web.sales.entity.SaleEntity;
+import br.edu.ufop.web.sales.entity.UserEntity;
+import br.edu.ufop.web.sales.exception.ResourceNotFoundException;
 import br.edu.ufop.web.sales.repository.EventRepository;
 import br.edu.ufop.web.sales.repository.SaleRepository;
+import br.edu.ufop.web.sales.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import main.java.br.edu.ufop.web.sales.converter.EventConverter;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,36 +24,31 @@ public class SaleService {
 
     private final SaleRepository saleRepository;
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
     private final SaleConverter saleConverter;
-    private final EventConverter eventConverter;
 
     // CREATE
     public Sale createSale(SaleDTO saleDTO) {
         EventEntity event = eventRepository.findById(saleDTO.eventId())
-                .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado com id: " + saleDTO.eventId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado: " + saleDTO.eventId()));
 
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(event.getStartSales()) || now.isAfter(event.getEndSales())) {
-            throw new RuntimeException("Vendas para este evento não estão abertas.");
-        }
-        SaleEntity sale = new Sale();
-        sale.setUserId(saleDTO.userId());
-        sale.setEvent(event);
-        sale.setSaleStatus(saleDTO.saleStatus());
-        sale.setSaleDate(now);
+        UserEntity user = userRepository.findById(saleDTO.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + saleDTO.userId()));
 
-        SaleEntity entityToSave = saleConverter.toEntity(event);
-    
-        SaleEntity savedEntity = saleRepository.save(entityToSave);
+        SaleEntity saleEntity = new SaleEntity();
+        saleEntity.setEvent(event);
+        saleEntity.setUser(user);
+        saleEntity.setSaleStatus(saleDTO.saleStatus());
+        saleEntity.setSaleDate(LocalDateTime.now());
 
-        return saleConverter.toDomain(savedEntity);
+        SaleEntity saved = saleRepository.save(saleEntity);
+        return saleConverter.toDomain(saved);
     }
 
     // READ (All)
     public List<Sale> getAllSales() {
-        List<SaleEntity> entities = saleRepository.findAll();
-
-        return entities.stream()
+        return saleRepository.findAll()
+                .stream()
                 .map(saleConverter::toDomain)
                 .collect(Collectors.toList());
     }
@@ -62,40 +56,46 @@ public class SaleService {
     // READ (By Id)
     public Sale getSaleById(UUID id) {
         SaleEntity entity = saleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada com id: " + id));
-        
+                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada: " + id));
         return saleConverter.toDomain(entity);
     }
-    
+
     // READ (By User Id)
     public List<Sale> getSalesByUserId(UUID userId) {
-        SaleEntity entity = saleRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada pelo id: " + userId));
-
-        return saleConverter.toDomain(entity);
+        List<SaleEntity> sales = saleRepository.findByUserId(userId);
+        
+        return sales.stream()
+                .map(saleConverter::toDomain)
+                .collect(Collectors.toList());
     }
 
     // UPDATE
     public Sale updateSale(UUID id, SaleDTO saleDetails) {
-        SaleEntity sale = getSaleById(id);
-        
+        SaleEntity sale = saleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada: " + id));
+
         if (!sale.getEvent().getId().equals(saleDetails.eventId())) {
             EventEntity newEvent = eventRepository.findById(saleDetails.eventId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado com id: " + saleDetails.eventId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado: " + saleDetails.eventId()));
             sale.setEvent(newEvent);
         }
 
-        sale.setUserId(saleDetails.userId());
+        if (!sale.getUser().getId().equals(saleDetails.userId())) {
+            UserEntity newUser = userRepository.findById(saleDetails.userId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + saleDetails.userId()));
+            sale.setUser(newUser);
+        }
+
         sale.setSaleStatus(saleDetails.saleStatus());
-
-        SaleEntity updatedEntity = saleRepository.save(sale);
-
-        return saleConverter.toDomain(updatedEntity);
+        
+        SaleEntity updated = saleRepository.save(sale);
+        return saleConverter.toDomain(updated);
     }
 
     // DELETE
     public void deleteSale(UUID id) {
-        SaleEntity sale = getSaleById(id);
+        SaleEntity sale = saleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada: " + id));
         saleRepository.delete(sale);
     }
 }

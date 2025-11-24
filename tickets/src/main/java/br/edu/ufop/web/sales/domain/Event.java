@@ -1,4 +1,4 @@
-package main.java.br.edu.ufop.web.sales.domain;
+package br.edu.ufop.web.sales.domain;
 
 import br.edu.ufop.web.sales.enums.EventType;
 import lombok.Getter;

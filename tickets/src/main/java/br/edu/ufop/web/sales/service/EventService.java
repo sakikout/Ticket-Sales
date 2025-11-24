@@ -3,14 +3,17 @@ package br.edu.ufop.web.sales.service;
 import br.edu.ufop.web.sales.converter.EventConverter;
 import br.edu.ufop.web.sales.domain.Event;
 import br.edu.ufop.web.sales.dto.EventDTO;
+
 import br.edu.ufop.web.sales.exception.ResourceNotFoundException;
 import br.edu.ufop.web.sales.entity.EventEntity;
 import br.edu.ufop.web.sales.repository.EventRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service

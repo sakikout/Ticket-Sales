@@ -1,4 +1,4 @@
-package main.java.br.edu.ufop.web.sales.converter;
+package br.edu.ufop.web.sales.converter;
 
 import br.edu.ufop.web.sales.domain.Event;
 import br.edu.ufop.web.sales.entity.EventEntity;

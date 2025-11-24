@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "events")
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,4 +49,5 @@ public class EventEntity extends AuditableEntity {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SaleEntity> sales = new ArrayList<>();
+
 }

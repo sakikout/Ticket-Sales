@@ -1,6 +1,6 @@
 package br.edu.ufop.web.sales.dto;
 
-import br.edu.ufop.web.sales.model.EventType;
+import br.edu.ufop.web.sales.enums.EventType;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

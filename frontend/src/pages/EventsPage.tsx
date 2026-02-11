@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -18,8 +19,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { createEvent, getEvents } from "@/services/events"
+import { createEvent, deleteEvent, getEvents } from "@/services/events"
 import type { Event, EventDTO, EventType } from "@/types/api"
+import { Calendar, Trash2 } from "lucide-react"
 
 const EVENT_TYPES: EventType[] = [
   "PALESTRA",
@@ -120,11 +122,26 @@ export default function EventsPage() {
     }
   }
 
+
+  async function handleDeleteEvent(id: string) {
+    try {
+      await deleteEvent(id)
+      toast.success("Evento deletado com sucesso.")
+      await loadEvents()
+    } catch (error) {
+      toast.error("Não foi possível deletar o evento.")
+      console.error(error)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <Card>
-        <CardHeader>
-          <CardTitle>Cadastro de Eventos</CardTitle>
+        <CardHeader className="border-b mb-5">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Calendar className="size-4 text-muted-foreground" />
+          Cadastro de Eventos
+          </CardTitle>
           <CardDescription>
             Registre novos eventos e defina período de vendas.
           </CardDescription>
@@ -256,6 +273,7 @@ export default function EventsPage() {
                 <TableHead>Data</TableHead>
                 <TableHead>Preço</TableHead>
                 <TableHead>Vendas</TableHead>
+                <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -264,12 +282,25 @@ export default function EventsPage() {
                   <TableCell className="font-medium">
                     {event.description}
                   </TableCell>
-                  <TableCell>{event.type.replace("_", " ")}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{event.type.replace("_", " ")}</Badge>
+                  </TableCell>
                   <TableCell>{formatDateTime(event.date)}</TableCell>
                   <TableCell>{formatCurrency(event.price)}</TableCell>
                   <TableCell>
                     {formatDateTime(event.startSales)} →{" "}
                     {formatDateTime(event.endSales)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteEvent(event.id)}
+                      >
+                        <Trash2 className="w-4 h-4" color="red"/>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,6 +1,6 @@
 import { type FormEvent, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
-
+import { Trash2, Pencil, CircleDollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -25,10 +25,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { createSale, getSales, updateSaleStatus } from "@/services/sales"
+import { createSale, deleteSale, getSales, updateSaleStatus } from "@/services/sales"
 import { getEvents } from "@/services/events"
 import { getUsers } from "@/services/users"
 import type { Event, Sale, SaleDTO, SaleStatus, User } from "@/types/api"
+import { Badge } from "@/components/ui/badge"
 
 const SALE_STATUS_OPTIONS: SaleStatus[] = [
   "EM_ABERTO",
@@ -140,6 +141,17 @@ export default function SalesPage() {
     }
   }
 
+  async function handleDeleteSale(id: string) {
+    try {
+      await deleteSale(id)
+      toast.success("Venda deletada com sucesso.")
+      await loadData()
+    } catch (error) {
+      toast.error("Não foi possível deletar a venda.")
+      console.error(error)
+    }
+  }
+
   const userById = useMemo(() => {
     return users.reduce<Record<string, User>>((acc, user) => {
       acc[user.id] = user
@@ -150,8 +162,11 @@ export default function SalesPage() {
   return (
     <div className="flex flex-col gap-8">
       <Card>
-        <CardHeader>
-          <CardTitle>Cadastro de Vendas</CardTitle>
+      <CardHeader className="border-b mb-5">
+          <CardTitle className="text-base flex items-center gap-2">
+            <CircleDollarSign className="size-4 text-muted-foreground" />
+            Cadastro de Vendas
+            </CardTitle>
           <CardDescription>
             Inclua uma venda para um usuário e evento específicos.
           </CardDescription>
@@ -288,9 +303,11 @@ export default function SalesPage() {
                     <TableCell>
                       {user ? `${user.name} (${user.email})` : sale.userId}
                     </TableCell>
-                    <TableCell>{sale.saleStatus.replace("_", " ")}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{sale.saleStatus.replace("_", " ")}</Badge></TableCell>
                     <TableCell>{formatDateTime(sale.saleDate)}</TableCell>
                     <TableCell>
+                      <div className="flex gap-2">
                       <Button
                         variant="outline"
                         size="sm"
@@ -299,8 +316,18 @@ export default function SalesPage() {
                           setStatusToUpdate(sale.saleStatus)
                         }}
                       >
-                        Alterar status
+                        <Pencil className="w-4 h-4" />
                       </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          handleDeleteSale(sale.id)
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" color="red"/>
+                      </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )

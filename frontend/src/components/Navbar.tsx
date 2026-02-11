@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom"
 import { Button } from "./ui/button"
 import { useAuth } from "@/contexts/AuthContext"
+import { Ticket } from "lucide-react"
 
 const links = [
   { label: "Eventos", to: "/admin/events" },
@@ -10,7 +11,7 @@ const links = [
 
 export default function Navbar() {
   const { logout } = useAuth()
-  
+
   return (
     <header className="border-b border-border bg-background">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
@@ -18,7 +19,8 @@ export default function Navbar() {
           <span className="text-sm uppercase tracking-widest text-muted-foreground">
             Sistema de Vendas
           </span>
-          <span className="text-lg font-semibold">
+          <span className="text-lg font-semibold flex items-center gap-2">
+            <Ticket className="size-4 text-muted-foreground" />
             Administração de Ingressos
           </span>
         </div>

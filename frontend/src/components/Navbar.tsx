@@ -1,11 +1,16 @@
 import { NavLink } from "react-router-dom"
+import { Button } from "./ui/button"
+import { useAuth } from "@/contexts/AuthContext"
 
 const links = [
-  { label: "Eventos", to: "/events" },
-  { label: "Vendas", to: "/sales" },
+  { label: "Eventos", to: "/admin/events" },
+  { label: "Vendas", to: "/admin/sales" },
+  { label: "Usuários", to: "/admin/users" },
 ]
 
 export default function Navbar() {
+  const { logout } = useAuth()
+  
   return (
     <header className="border-b border-border bg-background">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
@@ -34,6 +39,10 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
+
+          <Button variant="outline" onClick={logout}>
+            Sair
+          </Button>
         </nav>
       </div>
     </header>

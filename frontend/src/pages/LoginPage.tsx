@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Lock } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -42,8 +43,11 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Acesso Administrativo</CardTitle>
+      <CardHeader className="border-b mb-5">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Lock className="size-4 text-muted-foreground" />
+            <h2 className="text-base font-semibold">Acesso Administrativo</h2>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -62,7 +66,8 @@ export default function LoginPage() {
               <Label htmlFor="password">Senha</Label>
               <Input 
                 id="password" 
-                type="password" 
+                type="password"
+                placeholder="********"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -73,6 +78,9 @@ export default function LoginPage() {
 
             <Button type="submit" className="w-full">Entrar</Button>
           </form>
+          <p className="text-sm text-center text-muted-foreground mt-4">
+            Esse é um sistema privado. Caso não tenha acesso, contate o administrador.
+          </p>
         </CardContent>
       </Card>
     </div>

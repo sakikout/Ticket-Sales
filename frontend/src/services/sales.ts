@@ -22,3 +22,12 @@ export async function updateSaleStatus(
 export function isTerminalSaleStatus(status: SaleStatus): boolean {
   return status === "CANCELADO" || status === "ESTORNADO"
 }
+
+export async function deleteSale(id: string): Promise<void> {
+  try {
+    await api.delete(`/sales/${id}`)
+  } catch (error) {
+    console.error("Erro ao deletar venda", error)
+    throw error
+  }
+}

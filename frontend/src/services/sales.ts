@@ -6,6 +6,11 @@ export async function getSales(): Promise<Sale[]> {
   return response.data
 }
 
+export async function getSalesByUserId(userId: string): Promise<Sale[]> {
+  const response = await api.get<Sale[]>(`/sales/user/${userId}`)
+  return response.data
+}
+
 export async function createSale(payload: SaleDTO): Promise<Sale> {
   const response = await api.post<Sale>("/sales", payload)
   return response.data

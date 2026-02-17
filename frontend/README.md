@@ -12,6 +12,22 @@ Para buildar a imagem, vá para a pasta `/docker` no terminal e rode `docker com
 
 ## 📎Funcionalidades
 
+Para acessar páginas da rota `/admin`, certifique-se de que você possua um usuário administrador.
+
+```http
+### Criar um novo Usuário ADMIN
+POST http://localhost:4000/users
+Content-Type: application/json
+
+{
+  "name": "Admin",
+  "email": "admin@teste.com",
+  "password": "admin1234",
+  "city": "Belo Horizonte",
+  "type": "ADMIN"
+}
+```
+
 ### 1. Página de Eventos (/admin/events)
 
 Na página de eventos, é possível visualizar eventos existentes no banco de dados, além de cadastrar um novo evento e deletar eventos já existentes.

@@ -9,10 +9,21 @@ import LoginPage from "@/pages/LoginPage"
 
 import Navbar from "@/components/Navbar"
 import UsersPage from "@/pages/UsersPage"
+import ClientNavbar from "@/components/ClientNavbar"
+import ProfilePage from "@/pages/ProfilePage"
 
 const AdminLayout = () => (
   <>
     <Navbar />
+    <main className="mx-auto w-full max-w-6xl px-6 py-8">
+      <Outlet />
+    </main>
+  </>
+);
+
+const ClientLayout = () => (
+  <>
+    <ClientNavbar />
     <main className="mx-auto w-full max-w-6xl px-6 py-8">
       <Outlet />
     </main>
@@ -32,6 +43,14 @@ export default function PagesRouter() {
               <Route path="users" element={<UsersPage />} />
             </Route>
           </Route>
+
+        <Route path="/client" element={<PrivateRoute />}>
+          <Route element={<ClientLayout />}>
+            <Route index element={<Navigate to="/client/events" />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+          </Route>
+        </Route>
 
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>

@@ -6,6 +6,11 @@ export async function getUsers(): Promise<User[]> {
   return response.data
 }
 
+export async function getUserById(id: string): Promise<User | null> {
+  const response = await api.get<User>(`/users/${id}`)
+  return response.data
+}
+
 export async function loginService(email: string): Promise<User | null> {
   try {
     const response = await api.get<User[]>("/users") 
